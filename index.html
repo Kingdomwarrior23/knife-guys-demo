@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Knife Guys | Premium Knives, Swords & Custom Engraving</title>
+    <meta name="description" content="Amarillo & Lubbock's premier knife shop since 2003. Custom engraving, premium blades, swords, and self-defense gear. A Cut Above the Rest.">
+    
+    <!-- GHL Integration -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --black: #0a0a0a;
+            --dark: #141414;
+            --charcoal: #1e1e1e;
+            --steel: #2a2a2a;
+            --silver: #8a8a8a;
+            --light: #d4d4d4;
+            --white: #f5f5f5;
+            --gold: #c9a84c;
+            --gold-bright: #e6c55a;
+            --red: #8b2020;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+        
+        /* ====== HERO WITH SCROLL ANIMATION ====== */
+        .hero {
+            position: relative;
+            min-height: 400vh;
+            background: var(--black);
+        }
+        
+        .hero-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .hero-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hero-frame img {
+            max-width: 90%;
+            max-height: 80vh;
+            object-fit: contain;
+            filter: brightness(0.9) contrast(1.1);
+            border-radius: 8px;
+            box-shadow: 0 0 80px rgba(201, 168, 76, 0.15);
+        }
+        
+        .scroll-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .hero-text {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 2rem;
+        }
+        
+        .hero-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .hero-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--gold), var(--gold-bright), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-text p {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            color: var(--silver);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+        
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--silver);
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            animation: pulse 2s ease-in-out infinite;
+            z-index: 20;
+        }
+        
+        .scroll-hint svg {
+            width: 24px;
+            height: 24px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+        
+        /* ====== CARD SECTIONS ====== */
+        .cards-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .scroll-card {
+            position: absolute;
+            background: rgba(20, 20, 20, 0.92);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 380px;
+            opacity: 0;
+            transform: translateX(60px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: auto;
+        }
+        
+        .scroll-card.left {
+            left: 5%;
+            transform: translateX(-60px);
+        }
+        
+        .scroll-card.right {
+            right: 5%;
+            transform: translateX(60px);
+        }
+        
+        .scroll-card.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .scroll-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 0.75rem;
+        }
+        
+        .scroll-card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--light);
+        }
+        
+        /* ====== NAVIGATION ====== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.25rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(180deg, rgba(10,10,10,0.95) 0%, transparent 100%);
+            transition: background 0.3s;
+        }
+        
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.98);
+            border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+        }
+        
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--gold);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover { color: var(--gold); }
+        
+        .nav-cta {
+            background: var(--gold);
+            color: var(--black);
+            padding: 0.6rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .nav-cta:hover {
+            background: var(--gold-bright);
+            transform: translateY(-1px);
+        }
+        
+        /* ====== ABOUT SECTION ====== */
+        .about {
+            padding: 8rem 3rem;
+            background: var(--dark);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .about-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+        }
+        
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            font-weight: 900;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--silver);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-top: 0.25rem;
+        }
+        
+        .about-visual {
+            position: relative;
+            height: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(201, 168, 76, 0.2);
+        }
+        
+        .about-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* ====== SERVICES SECTION ====== */
+        .services {
+            padding: 8rem 3rem;
+            background: var(--black);
+        }
+        
+        .services h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            text-align: center;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+        
+        .services .subtitle {
+            text-align: center;
+            color: var(--silver);
+            font-size: 1.1rem;
+            margin-bottom: 4rem;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .service-card {
+            background: var(--charcoal);
+            border: 1px solid rgba(201, 168, 76, 0.15);
+            border-radius: 12px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(201, 168, 76, 0.4);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        .service-card:hover::before { transform: scaleX(1); }
+        
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .service-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+        
+        .service-card p {
+            color: var(--silver);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+        
+        /* ====== LOCATIONS ====== */
+        .locations {
+            padding: 8rem 3rem;
+            background: var(--dark);
+        }
+        
+        .locations h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            text-align: center;
+            color: var(--gold);
+            margin-bottom: 4rem;
+        }
+        
+        .locations-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .location-card {
+            background: var(--charcoal);
+            border: 1px solid rgba(201, 168, 76, 0.2);
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+        }
+        
+        .location-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+        
+        .location-card p {
+            color: var(--light);
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        
+        .location-card .phone {
+            font-size: 1.3rem;
+            color: var(--gold-bright);
+            font-weight: 600;
+            margin-top: 1rem;
+            display: block;
+        }
+        
+        /* ====== CTA SECTION ====== */
+        .cta {
+            padding: 8rem 3rem;
+            background: linear-gradient(135deg, var(--black) 0%, var(--charcoal) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .cta p {
+            color: var(--light);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+            position: relative;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+            color: var(--black);
+            padding: 1.2rem 3rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(201, 168, 76, 0.3);
+        }
+        
+        /* ====== FOOTER ====== */
+        footer {
+            padding: 4rem 3rem 2rem;
+            background: var(--black);
+            border-top: 1px solid rgba(201, 168, 76, 0.15);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto 3rem;
+        }
+        
+        .footer-brand h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+        
+        .footer-brand p {
+            color: var(--silver);
+            line-height: 1.7;
+            font-size: 0.9rem;
+        }
+        
+        .footer-col h4 {
+            color: var(--white);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-col a {
+            display: block;
+            color: var(--silver);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-col a:hover { color: var(--gold); }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--silver);
+            font-size: 0.8rem;
+        }
+        
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .about { grid-template-columns: 1fr; padding: 4rem 1.5rem; }
+            .about-visual { height: 300px; }
+            .locations-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .scroll-card { max-width: 280px; padding: 1.5rem; }
+            .scroll-card.left { left: 2%; }
+            .scroll-card.right { right: 2%; }
+            .services { padding: 4rem 1.5rem; }
+            .cta { padding: 4rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="navbar">
+    <a href="#" class="nav-logo">THE KNIFE GUYS</a>
+    <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#locations">Locations</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Visit Us</a>
+</nav>
+
+<!-- Hero with Scroll Animation -->
+<section class="hero" id="hero">
+    <div class="hero-sticky">
+        <div class="hero-frame">
+            <img id="scrollFrame" src="frames/f_0001.jpg" alt="The Knife Guys - Custom Engraving">
+        </div>
+        
+        <div class="scroll-overlay">
+            <div class="hero-text" id="heroText">
+                <h1>The Knife Guys</h1>
+                <p>A Cut Above the Rest</p>
+            </div>
+        </div>
+        
+        <!-- Cards that appear during scroll -->
+        <div class="cards-container">
+            <div class="scroll-card right" id="card1" data-show="0.15" data-hide="0.40">
+                <h3>✦ Custom Engraving</h3>
+                <p>Personalize your blade with custom text, logos, and designs. Available at both our Amarillo and Lubbock locations.</p>
+            </div>
+            <div class="scroll-card left" id="card2" data-show="0.40" data-hide="0.65">
+                <h3>✦ Premium Selection</h3>
+                <p>From kitchen knives to collector swords, we carry the finest blades. Over 20 years of expertise in every recommendation.</p>
+            </div>
+            <div class="scroll-card right" id="card3" data-show="0.65" data-hide="0.90">
+                <h3>✦ Expert Sharpening</h3>
+                <p>Professional blade sharpening and restoration. We bring your worn knives back to razor-sharp perfection.</p>
+            </div>
+        </div>
+        
+        <div class="scroll-hint" id="scrollHint">
+            <span>Scroll to reveal</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+            </svg>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about" id="about">
+    <div class="about-text">
+        <h2>Serving the Panhandle Since 2003</h2>
+        <p>What started as a passion for fine blades has grown into West Texas's most trusted knife destination. With locations in both Amarillo and Lubbock, we've spent over two decades connecting people with the perfect blade.</p>
+        <p>Whether you're a chef seeking the perfect kitchen knife, a collector hunting rare pieces, or looking for self-defense gear — we're your people.</p>
+        <div class="about-stats">
+            <div class="stat">
+                <div class="stat-number">20+</div>
+                <div class="stat-label">Years</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">2</div>
+                <div class="stat-label">Locations</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">1000s</div>
+                <div class="stat-label">Blades</div>
+            </div>
+        </div>
+    </div>
+    <div class="about-visual">
+        <img src="frames/f_0060.jpg" alt="Premium knife craftsmanship">
+    </div>
+</section>
+
+<!-- Services -->
+<section class="services" id="services">
+    <h2>What We Offer</h2>
+    <p class="subtitle">Everything you need, from purchase to maintenance</p>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="service-icon">🔪</div>
+            <h3>Premium Knives</h3>
+            <p>Chef's knives, hunting blades, EDC folders, and specialty cutlery from the world's top manufacturers.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-icon">⚔️</div>
+            <h3>Swords & Collectibles</h3>
+            <p>Historical replicas, fantasy pieces, katana, and display-worthy collector swords.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-icon">✍️</div>
+            <h3>Custom Engraving</h3>
+            <p>Make it yours. Names, dates, logos, and custom designs etched with precision.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-icon">🛡️</div>
+            <h3>Self Defense</h3>
+            <p>Pepper spray, tactical gear, and personal protection equipment.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-icon">⚡</div>
+            <h3>Sharpening & Repair</h3>
+            <p>Professional blade maintenance, edge restoration, and handle repair services.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-icon">🎁</div>
+            <h3>Gift Sets</h3>
+            <p>Curated gift packages for the blade enthusiast in your life. Custom wrapping available.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Locations -->
+<section class="locations" id="locations">
+    <h2>Visit Us</h2>
+    <div class="locations-grid">
+        <div class="location-card">
+            <h3>Amarillo</h3>
+            <p>5111 S Coulter St<br>Amarillo, TX 79119</p>
+            <p><strong>Hours:</strong> Mon-Sat 10am-7pm, Sun 12pm-5pm</p>
+            <a href="tel:+18063312672" class="phone">(806) 331-2672</a>
+        </div>
+        <div class="location-card">
+            <h3>Lubbock</h3>
+            <p>8201 University Ave #18<br>Lubbock, TX 79424</p>
+            <p><strong>Hours:</strong> Mon-Sat 10am-7pm, Sun 12pm-5pm</p>
+            <a href="tel:+18063312672" class="phone">(806) 331-2672</a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+    <h2>Find Your Perfect Blade</h2>
+    <p>Stop by either location or give us a call. Our experts are ready to help you find exactly what you're looking for.</p>
+    <a href="https://amarilloknifeguys.com" class="cta-button">Shop Now at amarilloknifeguys.com</a>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <h3>The Knife Guys</h3>
+            <p>Amarillo & Lubbock's premier knife shop. Premium blades, custom engraving, and expert service since 2003.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Products</h4>
+            <a href="#">Kitchen Knives</a>
+            <a href="#">Hunting</a>
+            <a href="#">Swords</a>
+            <a href="#">Self Defense</a>
+        </div>
+        <div class="footer-col">
+            <h4>Services</h4>
+            <a href="#">Engraving</a>
+            <a href="#">Sharpening</a>
+            <a href="#">Repair</a>
+            <a href="#">Gift Sets</a>
+        </div>
+        <div class="footer-col">
+            <h4>Connect</h4>
+            <a href="#">Facebook</a>
+            <a href="#">Instagram</a>
+            <a href="#">Contact Us</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025 The Knife Guys. A Cut Above the Rest. | Amarillo & Lubbock, TX</p>
+    </div>
+</footer>
+
+<!-- GHL Chat Widget (Embed Here) -->
+<!-- <script src="https://widgets.gohighlevel.com/..."></script> -->
+
+<script>
+    // ====== SCROLL ANIMATION ENGINE ======
+    const totalFrames = 97;
+    const frameImg = document.getElementById('scrollFrame');
+    const heroText = document.getElementById('heroText');
+    const scrollHint = document.getElementById('scrollHint');
+    const navbar = document.getElementById('navbar');
+    
+    // Preload frames
+    const frames = [];
+    let loadedCount = 0;
+    
+    for (let i = 1; i <= totalFrames; i++) {
+        const img = new Image();
+        const src = `frames/f_${String(i).padStart(4, '0')}.jpg`;
+        img.src = src;
+        img.onload = () => { loadedCount++; };
+        frames.push(img);
+    }
+    
+    // Scroll handler
+    let ticking = false;
+    
+    function updateScroll() {
+        const hero = document.getElementById('hero');
+        const heroRect = hero.getBoundingClientRect();
+        const scrollProgress = Math.max(0, Math.min(1, -heroRect.top / (heroRect.height - window.innerHeight)));
+        
+        // Update frame
+        const frameIndex = Math.min(totalFrames - 1, Math.floor(scrollProgress * totalFrames));
+        frameImg.src = frames[frameIndex].src;
+        
+        // Hero text visibility
+        if (scrollProgress < 0.1) {
+            heroText.classList.add('visible');
+            scrollHint.style.opacity = 1 - (scrollProgress * 10);
+        } else {
+            heroText.classList.remove('visible');
+            scrollHint.style.opacity = 0;
+        }
+        
+        // Card visibility
+        document.querySelectorAll('.scroll-card').forEach(card => {
+            const show = parseFloat(card.dataset.show);
+            const hide = parseFloat(card.dataset.hide);
+            if (scrollProgress >= show && scrollProgress <= hide) {
+                card.classList.add('visible');
+            } else {
+                card.classList.remove('visible');
+            }
+        });
+        
+        // Navbar style
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+        
+        ticking = false;
+    }
+    
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(updateScroll);
+            ticking = true;
+        }
+    });
+    
+    // Initial state
+    heroText.classList.add('visible');
+    
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
